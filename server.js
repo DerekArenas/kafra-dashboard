@@ -306,7 +306,7 @@ app.post('/api/login', async (req, res) => {
   }
   try {
     const r = await pool.query(
-      'SELECT id, usuario, nombre FROM usuarios WHERE usuario=$1 AND password=$2 AND activo=true',
+      'SELECT id, usuario, nombre, rol FROM usuarios WHERE usuario=$1 AND password=$2 AND activo=true',
       [usuario, password]
     );
     if (r.rows.length === 0) {
@@ -318,7 +318,7 @@ app.post('/api/login', async (req, res) => {
 
 // ── USUARIOS (gestión) ────────────────────────────────
 app.get('/api/usuarios', async (req, res) => {
-  const r = await pool.query('SELECT id, usuario, nombre, rol, activo, created_at FROM usuarios ORDER BY id');
+  const r = await pool.query('SELECT id, usuario, nombre, activo, created_at FROM usuarios ORDER BY id');
   res.json(r.rows);
 });
 app.post('/api/usuarios', async (req, res) => {
