@@ -298,6 +298,48 @@ app.delete('/api/teltrabajador/:id', async (req, res) => {
   res.json({ ok: true });
 });
 
+// ── LOGIN ─────────────────────────────────────────────
+app.post('/api/login', async (req, res) => {
+  const { usuario, password } = req.body;
+  if (!usuario || !password) {
+    return res.status(400).json({ error: 'Usuario y contraseña requeridos' });
+  }
+  try {
+    const r = await pool.query(
+      'SELECT id, usuario, nombre FROM usuarios WHERE usuario=$1 AND password=$2 AND activo=true',
+      [usuario, password]
+    );
+    if (r.rows.length === 0) {
+      return res.status(401).json({ error: 'Usuario o contraseña incorrectos' });
+    }
+    res.json({ ok: true, usuario: r.rows[0] });
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// ── USUARIOS (gestión) ────────────────────────────────
+app.get('/api/usuarios', async (req, res) => {
+  const r = await pool.query('SELECT id, usuario, nombre, activo, created_at FROM usuarios ORDER BY id');
+  res.json(r.rows);
+});
+app.post('/api/usuarios', async (req, res) => {
+  const { usuario, password, nombre } = req.body;
+  if (!usuario || !password) return res.status(400).json({ error: 'usuario y password requeridos' });
+  try {
+    const r = await pool.query(
+      'INSERT INTO usuarios (usuario, password, nombre) VALUES ($1,$2,$3) RETURNING id, usuario, nombre',
+      [usuario, password, nombre || '']
+    );
+    res.status(201).json(r.rows[0]);
+  } catch (e) {
+    if (e.code === '23505') return res.status(400).json({ error: 'Ese usuario ya existe' });
+    res.status(500).json({ error: e.message });
+  }
+});
+app.delete('/api/usuarios/:id', async (req, res) => {
+  await pool.query('DELETE FROM usuarios WHERE id=$1', [req.params.id]);
+  res.json({ ok: true });
+});
+
 // ── START ─────────────────────────────────────────────
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Kafra API en puerto ${PORT}`));
