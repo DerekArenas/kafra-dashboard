@@ -1235,6 +1235,8 @@ async function doLogin() {
 window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('loginUser').focus();
 });
+// Despertar el servidor al cargar la página
+fetch('https://kafra-api.onrender.com/api/usuarios').catch(() => {});  
 </script>
 </body>
 </html>
