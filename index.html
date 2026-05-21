@@ -863,7 +863,7 @@
 </div>
 
 <script>
-const API = 'https://kafra-api.onrender.com/api';
+const API = 'https://kafra-api.onrender.com';
 
 function show(id) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -1190,31 +1190,44 @@ cargarTelCliente(); cargarTelTrabajador();
 
 // ── LOGIN ─────────────────────────────────────────────
 // Cambia estas credenciales por las tuyas
-const USUARIOS = {
-  'admin':  'kafra2024',
-  'kafra':  '1234',
-};
-
-function doLogin() {
+async function doLogin() {
   const user = document.getElementById('loginUser').value.trim();
   const pass = document.getElementById('loginPass').value;
   const errEl = document.getElementById('loginError');
+  const btn = document.querySelector('.login-btn');
 
   if (!user || !pass) {
     errEl.textContent = '⚠ Completa usuario y contraseña.';
     return;
   }
 
-  if (USUARIOS[user] && USUARIOS[user] === pass) {
-    const overlay = document.getElementById('loginOverlay');
-    overlay.classList.add('hidden');
-    document.body.classList.remove('login-active');
-    // Ocultar completamente después de la transición
-    setTimeout(() => overlay.style.display = 'none', 420);
-  } else {
-    errEl.textContent = '✕ Usuario o contraseña incorrectos.';
-    document.getElementById('loginPass').value = '';
-    document.getElementById('loginPass').focus();
+  btn.textContent = 'Verificando...';
+  btn.disabled = true;
+  errEl.textContent = '';
+
+  try {
+    const res = await fetch(`${API}/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ usuario: user, password: pass })
+    });
+    const data = await res.json();
+
+    if (res.ok && data.ok) {
+      const overlay = document.getElementById('loginOverlay');
+      overlay.classList.add('hidden');
+      document.body.classList.remove('login-active');
+      setTimeout(() => overlay.style.display = 'none', 420);
+    } else {
+      errEl.textContent = '✕ ' + (data.error || 'Usuario o contraseña incorrectos.');
+      document.getElementById('loginPass').value = '';
+      document.getElementById('loginPass').focus();
+    }
+  } catch (e) {
+    errEl.textContent = '⚠ Error de conexión. Intenta de nuevo.';
+  } finally {
+    btn.textContent = 'Iniciar sesión →';
+    btn.disabled = false;
   }
 }
 
