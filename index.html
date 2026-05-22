@@ -492,6 +492,98 @@
 
   /* Bloquea el scroll del fondo mientras está el login */
   body.login-active { overflow: hidden; }
+
+  /* ─── KPI CARDS ──────────────────────────── */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  .kpi-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: border-color 0.2s;
+  }
+
+  .kpi-card:hover { border-color: var(--accent2); }
+  .kpi-card.kpi-alert:hover { border-color: var(--danger); }
+  .kpi-card.kpi-alert { border-color: rgba(240,82,82,0.3); }
+
+  .kpi-icon {
+    font-size: 26px;
+    width: 44px; height: 44px;
+    display: grid; place-items: center;
+    background: var(--surface2);
+    border-radius: 10px;
+    flex-shrink: 0;
+  }
+
+  .kpi-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+
+  .kpi-value {
+    font-family: var(--font-head);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .kpi-alert .kpi-value { color: var(--danger); }
+
+  /* ─── DASHBOARD COLUMNS ──────────────────── */
+  .dashboard-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  @media (max-width: 900px) {
+    .dashboard-cols { grid-template-columns: 1fr; }
+  }
+
+  .dash-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .dash-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--font-head);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    padding: 0 2px;
+  }
+
+  .dash-hint {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--text-muted);
+    background: var(--surface2);
+    padding: 2px 8px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+  }
+
+  /* Stock bajo highlight */
+  .stock-critico td:last-child { color: var(--danger) !important; font-weight: 600; }
+  .stock-bajo td:last-child { color: #f97316 !important; font-weight: 500; }
 </style>
 </head>
 
@@ -531,9 +623,9 @@
 <div class="layout">
 
   <aside>
-    <span class="nav-group-label">Empresa</span>
-    <button onclick="show('distribuidora')" id="nav-distribuidora" class="active" data-roles="admin,gerente,consulta">
-      <span class="icon">🏢</span> Distribuidora
+    <span class="nav-group-label">General</span>
+    <button onclick="show('inicio')" id="nav-inicio" class="active" data-roles="admin,gerente,vendedor,almacenista,repartidor,consulta">
+      <span class="icon">🏠</span> Inicio
     </button>
 
     <span class="nav-group-label">Clientes</span>
@@ -588,29 +680,72 @@
 
   <main>
 
-    <!-- DISTRIBUIDORA -->
-    <div id="distribuidora" class="section active">
+    <!-- INICIO -->
+    <div id="inicio" class="section active">
       <div class="section-header">
-        <h2>🏢 Distribuidora <span class="badge">Empresa</span></h2>
+        <h2 id="welcomeMsg">👋 Bienvenido <span class="badge">Inicio</span></h2>
       </div>
-      <div class="form-card">
-        <h3>Nueva Distribuidora</h3>
-        <div class="form-grid">
-          <input id="dis_nombre" placeholder="Nombre">
-          <input id="dis_rfc" placeholder="RFC (12-13 caracteres)" maxlength="13">
-          <input id="dis_dir" placeholder="Calle y Ciudad">
-          <input id="dis_cp" placeholder="Código Postal" maxlength="5">
-          <input id="dis_tel" placeholder="Teléfono">
-          <input id="dis_correo" placeholder="Correo electrónico">
+
+      <!-- KPI CARDS -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon">💳</div>
+          <div class="kpi-info">
+            <div class="kpi-label">Ventas totales</div>
+            <div class="kpi-value" id="kpi-ventas">—</div>
+          </div>
         </div>
-        <button class="btn-primary btn-accion" onclick="addDistribuidora()">＋ Agregar</button>
-        <div id="err_distribuidora" class="error"></div>
+        <div class="kpi-card">
+          <div class="kpi-icon">📦</div>
+          <div class="kpi-info">
+            <div class="kpi-label">Compras registradas</div>
+            <div class="kpi-value" id="kpi-compras">—</div>
+          </div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon">👤</div>
+          <div class="kpi-info">
+            <div class="kpi-label">Clientes</div>
+            <div class="kpi-value" id="kpi-clientes">—</div>
+          </div>
+        </div>
+        <div class="kpi-card kpi-alert">
+          <div class="kpi-icon">⚠️</div>
+          <div class="kpi-info">
+            <div class="kpi-label">Productos stock bajo</div>
+            <div class="kpi-value" id="kpi-stockbajo">—</div>
+          </div>
+        </div>
       </div>
-      <div class="table-wrapper">
-        <table>
-          <thead><tr><th>Nombre</th><th>RFC</th><th>Dirección</th><th>CP</th><th>Teléfono</th><th>Correo</th><th></th></tr></thead>
-          <tbody id="t_distribuidora"></tbody>
-        </table>
+
+      <div class="dashboard-cols">
+        <!-- STOCK BAJO -->
+        <div class="dash-panel">
+          <div class="dash-panel-header">
+            <span>⚠️ Productos con stock bajo</span>
+            <span class="dash-hint">stock ≤ 10</span>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>ID</th><th>Producto</th><th>Código</th><th>Stock</th></tr></thead>
+              <tbody id="t_stockbajo"><tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:20px">Cargando...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ÚLTIMAS VENTAS -->
+        <div class="dash-panel">
+          <div class="dash-panel-header">
+            <span>💳 Últimas ventas</span>
+            <span class="dash-hint">recientes</span>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead><tr><th>ID</th><th>Cliente</th><th>Fecha</th><th>Total</th></tr></thead>
+              <tbody id="t_ultimasventas"><tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:20px">Cargando...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1222,8 +1357,59 @@ async function addTelTrabajador() {
 }
 async function delTelTrabajador(id) { await apiDelete('/teltrabajador/' + id); cargarTelTrabajador(); }
 
+// ── DASHBOARD / INICIO
+async function cargarDashboard() {
+  try {
+    // Compras / ventas
+    const compras = await apiGet('/compra');
+    const totalVentas = compras.reduce((sum, c) => sum + parseFloat(c.total || 0), 0);
+    document.getElementById('kpi-ventas').textContent = '$' + totalVentas.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    document.getElementById('kpi-compras').textContent = compras.length;
+
+    // Últimas ventas (últimas 8)
+    const ultimas = [...compras].sort((a,b) => (b.id_compra||0) - (a.id_compra||0)).slice(0, 8);
+    const tbVentas = document.getElementById('t_ultimasventas');
+    if (ultimas.length === 0) {
+      tbVentas.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:20px">Sin ventas registradas</td></tr>';
+    } else {
+      tbVentas.innerHTML = ultimas.map(c =>
+        `<tr><td>${c.id_compra}</td><td>${c.id_cliente}</td><td>${c.fecha||'—'}</td><td>$${parseFloat(c.total||0).toLocaleString('es-MX',{minimumFractionDigits:2})}</td></tr>`
+      ).join('');
+    }
+  } catch(e) {
+    document.getElementById('kpi-ventas').textContent = 'N/A';
+    document.getElementById('kpi-compras').textContent = 'N/A';
+  }
+
+  try {
+    // Clientes
+    const clientes = await apiGet('/cliente');
+    document.getElementById('kpi-clientes').textContent = clientes.length;
+  } catch(e) {
+    document.getElementById('kpi-clientes').textContent = 'N/A';
+  }
+
+  try {
+    // Productos con stock bajo (≤ 10)
+    const productos = await apiGet('/producto');
+    const bajo = productos.filter(p => parseInt(p.stock||0) <= 10);
+    document.getElementById('kpi-stockbajo').textContent = bajo.length;
+    const tbStock = document.getElementById('t_stockbajo');
+    if (bajo.length === 0) {
+      tbStock.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:20px">✅ Todos los productos tienen stock suficiente</td></tr>';
+    } else {
+      tbStock.innerHTML = bajo.map(p => {
+        const cls = parseInt(p.stock) <= 3 ? 'stock-critico' : 'stock-bajo';
+        return `<tr class="${cls}"><td>${p.id_producto}</td><td>${p.nombre}</td><td>${p.codigo_barras||'—'}</td><td>${p.stock}</td></tr>`;
+      }).join('');
+    }
+  } catch(e) {
+    document.getElementById('kpi-stockbajo').textContent = 'N/A';
+  }
+}
+
 // ── CARGA INICIAL
-cargarDistribuidora(); cargarCliente(); cargarClienteFactura(); cargarClienteSinFactura();
+cargarCliente(); cargarClienteFactura(); cargarClienteSinFactura();
 cargarProveedor(); cargarProducto(); cargarTrabajador(); cargarTrabajadorInterno();
 cargarRepartidor(); cargarCompra(); cargarDetalle(); cargarSuministro();
 cargarTelCliente(); cargarTelTrabajador();
@@ -1232,12 +1418,12 @@ cargarTelCliente(); cargarTelTrabajador();
 // Cambia estas credenciales por las tuyas
 // ── ROLES Y PERMISOS ─────────────────────────────────
 const PERMISOS = {
-  admin:       ['distribuidora','cliente','clienteFactura','clienteSinFactura','proveedor','suministro','producto','compra','detalle','trabajador','trabajadorInterno','repartidor','telCliente','telTrabajador'],
-  gerente:     ['distribuidora','cliente','clienteFactura','clienteSinFactura','proveedor','suministro','producto','compra','detalle','trabajador','trabajadorInterno','repartidor','telCliente','telTrabajador'],
-  vendedor:    ['cliente','clienteFactura','clienteSinFactura','producto','compra','detalle','telCliente'],
-  almacenista: ['producto','suministro','proveedor'],
-  repartidor:  ['compra','detalle','cliente'],
-  consulta:    ['distribuidora','cliente','clienteFactura','clienteSinFactura','proveedor','suministro','producto','compra','detalle','trabajador','trabajadorInterno','repartidor','telCliente','telTrabajador'],
+  admin:       ['inicio','cliente','clienteFactura','clienteSinFactura','proveedor','suministro','producto','compra','detalle','trabajador','trabajadorInterno','repartidor','telCliente','telTrabajador'],
+  gerente:     ['inicio','cliente','clienteFactura','clienteSinFactura','proveedor','suministro','producto','compra','detalle','trabajador','trabajadorInterno','repartidor','telCliente','telTrabajador'],
+  vendedor:    ['inicio','cliente','clienteFactura','clienteSinFactura','producto','compra','detalle','telCliente'],
+  almacenista: ['inicio','producto','suministro','proveedor'],
+  repartidor:  ['inicio','compra','detalle','cliente'],
+  consulta:    ['inicio','cliente','clienteFactura','clienteSinFactura','proveedor','suministro','producto','compra','detalle','trabajador','trabajadorInterno','repartidor','telCliente','telTrabajador'],
 };
 
 const ROLES_LABEL = {
@@ -1246,10 +1432,23 @@ const ROLES_LABEL = {
 };
 
 let rolActual = null;
+let usuarioActual = null;
 
-function aplicarPermisos(rol) {
+function aplicarPermisos(rol, nombreUsuario) {
   rolActual = rol;
+  usuarioActual = nombreUsuario || 'Usuario';
   const permitidas = PERMISOS[rol] || [];
+
+  // Actualizar bienvenida con nombre del usuario
+  const msg = document.getElementById('welcomeMsg');
+  if (msg) {
+    msg.innerHTML = `👋 Bienvenido, <span style="color:var(--accent)">${usuarioActual}</span> <span class="badge">${ROLES_LABEL[rol]||rol}</span>`;
+  }
+
+  // Mostrar nombre en el header también
+  const badge = document.getElementById('userBadge');
+  badge.textContent = usuarioActual;
+  badge.className = 'user-badge ' + rol;
 
   // Mostrar/ocultar botones del nav
   document.querySelectorAll('aside button[data-roles]').forEach(btn => {
@@ -1273,14 +1472,11 @@ function aplicarPermisos(rol) {
     document.querySelectorAll('.btn-accion').forEach(btn => btn.style.display = 'none');
   }
 
-  // Mostrar badge de rol en el header
-  const badge = document.getElementById('userBadge');
-  badge.textContent = ROLES_LABEL[rol] || rol;
-  badge.className = 'user-badge ' + rol;
+  // Cargar datos del dashboard
+  cargarDashboard();
 
-  // Navegar a la primera sección permitida
-  const primera = permitidas[0];
-  if (primera) show(primera);
+  // Navegar a inicio
+  show('inicio');
 }
 
 function cerrarSesion() {
@@ -1315,7 +1511,7 @@ async function doLogin() {
       overlay.classList.add('hidden');
       document.body.classList.remove('login-active');
       setTimeout(() => overlay.style.display = 'none', 420);
-      aplicarPermisos(data.usuario.rol || 'consulta');
+      aplicarPermisos(data.usuario.rol || 'consulta', data.usuario.usuario || data.usuario.nombre || 'Usuario');
     } else {
       errEl.textContent = '✕ ' + (data.error || 'Usuario o contraseña incorrectos.');
       document.getElementById('loginPass').value = '';
