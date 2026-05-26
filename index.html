@@ -359,6 +359,200 @@
 
   .btn-delete:hover { background: rgba(240,82,82,0.22); }
 
+
+  /* ─── MEJORAS VISUALES ───────────────────── */
+
+  /* Línea accent en sidebar activo */
+  aside button.active {
+    background: rgba(232,201,109,0.10);
+    color: var(--accent);
+    font-weight: 500;
+    border-left: 2px solid var(--accent);
+    padding-left: 10px;
+  }
+
+  /* Separador sutil en header */
+  header {
+    box-shadow: 0 1px 0 var(--border), 0 4px 24px rgba(0,0,0,0.2);
+  }
+
+  /* Glow suave en logo */
+  .logo-mark {
+    box-shadow: 0 0 16px rgba(232,201,109,0.25);
+  }
+
+  /* Tablas más refinadas */
+  table {
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  thead th {
+    background: var(--bg);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    font-weight: 600;
+  }
+
+  tbody tr {
+    transition: background 0.15s;
+  }
+
+  tbody tr:hover {
+    background: rgba(255,255,255,0.03);
+  }
+
+  tbody td {
+    padding: 11px 14px;
+    border-bottom: 1px solid rgba(42,47,62,0.5);
+    color: var(--text);
+    font-size: 13.5px;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* Form card con borde top accent */
+  .form-card {
+    border-top: 2px solid var(--accent);
+    box-shadow: 0 2px 16px rgba(0,0,0,0.15);
+  }
+
+  /* Inputs con focus más visible */
+  input:focus, select:focus {
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 3px rgba(232,201,109,0.08) !important;
+  }
+
+  /* Botón primary más refinado */
+  .btn-primary {
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(rgba(255,255,255,0.08), transparent);
+    pointer-events: none;
+  }
+
+  /* Sección header con línea decorativa */
+  .section-header h2::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 20px;
+    background: var(--accent);
+    border-radius: 2px;
+    margin-right: 4px;
+    flex-shrink: 0;
+  }
+
+  /* Table wrapper con sombra */
+  .table-wrap {
+    box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+  }
+
+  /* Nav group label con línea */
+  .nav-group-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .nav-group-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Stat cards en inicio */
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: border-color 0.2s, transform 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--accent);
+    opacity: 0.6;
+  }
+  .stat-card:hover {
+    border-color: rgba(232,201,109,0.3);
+    transform: translateY(-2px);
+  }
+  .stat-card .stat-icon {
+    font-size: 22px;
+    margin-bottom: 4px;
+  }
+  .stat-card .stat-value {
+    font-family: var(--font-head);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1;
+  }
+  .stat-card .stat-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  /* Welcome banner */
+  .welcome-banner {
+    background: linear-gradient(135deg, var(--surface) 0%, rgba(232,201,109,0.06) 100%);
+    border: 1px solid rgba(232,201,109,0.2);
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .welcome-banner h2 {
+    font-family: var(--font-head);
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .welcome-banner h2 span { color: var(--accent); }
+  .welcome-banner p {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .welcome-date {
+    font-family: var(--font-head);
+    font-size: 13px;
+    color: var(--text-muted);
+    text-align: right;
+    flex-shrink: 0;
+  }
+
   /* ─── SCROLLBAR ──────────────────────────── */
   ::-webkit-scrollbar { width: 5px; height: 5px; }
   ::-webkit-scrollbar-track { background: transparent; }
@@ -747,8 +941,16 @@
 
     <!-- INICIO -->
     <div id="inicio" class="section active">
-      <div class="section-header">
-        <h2 id="welcomeMsg">👋 Bienvenido <span class="badge">Inicio</span></h2>
+      <!-- WELCOME BANNER -->
+      <div class="welcome-banner">
+        <div>
+          <h2 id="welcomeMsg">👋 Bienvenido, <span id="welcomeName">—</span></h2>
+          <p id="welcomeRol">Cargando...</p>
+        </div>
+        <div class="welcome-date">
+          <div id="welcomeFecha"></div>
+          <div id="welcomeHora" style="font-size:22px;font-weight:700;color:var(--text);margin-top:4px;"></div>
+        </div>
       </div>
 
       <!-- KPI CARDS -->
@@ -1500,16 +1702,31 @@ const ROLES_LABEL = {
 let rolActual = null;
 let usuarioActual = null;
 
+function iniciarReloj() {
+  function actualizar() {
+    const now = new Date();
+    const fecha = now.toLocaleDateString('es-MX', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+    const hora  = now.toLocaleTimeString('es-MX', { hour:'2-digit', minute:'2-digit' });
+    const f = document.getElementById('welcomeFecha');
+    const h = document.getElementById('welcomeHora');
+    if (f) f.textContent = fecha.charAt(0).toUpperCase() + fecha.slice(1);
+    if (h) h.textContent = hora;
+  }
+  actualizar();
+  setInterval(actualizar, 1000);
+}
+
 function aplicarPermisos(rol, nombreUsuario) {
   rolActual = rol;
   usuarioActual = nombreUsuario || 'Usuario';
   const permitidas = PERMISOS[rol] || [];
 
-  // Actualizar bienvenida con nombre del usuario
-  const msg = document.getElementById('welcomeMsg');
-  if (msg) {
-    msg.innerHTML = `👋 Bienvenido, <span style="color:var(--accent)">${usuarioActual}</span> <span class="badge">${ROLES_LABEL[rol]||rol}</span>`;
-  }
+  // Actualizar welcome banner
+  const nameEl = document.getElementById('welcomeName');
+  const rolEl  = document.getElementById('welcomeRol');
+  if (nameEl) nameEl.textContent = usuarioActual;
+  if (rolEl)  rolEl.textContent  = `Rol: ${ROLES_LABEL[rol] || rol} — Sistema de gestión Kafra`;
+  iniciarReloj();
 
   // Mostrar nombre en el header también
   const badge = document.getElementById('userBadge');
