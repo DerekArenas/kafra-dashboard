@@ -584,6 +584,71 @@
   /* Stock bajo highlight */
   .stock-critico td:last-child { color: var(--danger) !important; font-weight: 600; }
   .stock-bajo td:last-child { color: #f97316 !important; font-weight: 500; }
+
+  /* ── MODAL MAPA ─────────────────────────── */
+  .map-modal-overlay {
+    position: fixed; inset: 0; z-index: 9999;
+    background: rgba(0,0,0,0.7);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.25s;
+  }
+  .map-modal-overlay.open { opacity: 1; pointer-events: all; }
+  .map-modal-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    width: 100%; max-width: 560px;
+    position: relative;
+  }
+  .map-modal-header {
+    display: flex; align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .map-modal-header h3 {
+    font-size: 15px; font-weight: 600;
+    color: var(--text);
+  }
+  .map-modal-close {
+    background: none; border: none;
+    color: var(--text-muted); font-size: 18px;
+    cursor: pointer; transition: color 0.2s;
+  }
+  .map-modal-close:hover { color: var(--text); }
+  .map-iframe-wrap {
+    border-radius: 8px; overflow: hidden;
+    border: 1px solid var(--border);
+    height: 300px;
+  }
+  .map-iframe-wrap iframe {
+    width: 100%; height: 100%; border: none;
+  }
+  .map-modal-footer {
+    margin-top: 12px;
+    display: flex; gap: 10px; justify-content: flex-end;
+  }
+  .btn-maps {
+    padding: 8px 16px;
+    background: var(--accent2);
+    color: #fff; border: none;
+    border-radius: 7px; font-size: 13px;
+    font-weight: 600; cursor: pointer;
+    transition: opacity 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-maps:hover { opacity: 0.85; }
+  .btn-map-icon {
+    background: none; border: none;
+    cursor: pointer; font-size: 16px;
+    padding: 2px 6px; border-radius: 5px;
+    transition: background 0.15s;
+    color: var(--accent2);
+  }
+  .btn-map-icon:hover { background: var(--border); }
+
 </style>
 </head>
 
@@ -1113,7 +1178,8 @@ async function cargarCliente() {
   tb.innerHTML = '';
   rows.forEach(r => {
     tb.innerHTML += `<tr>
-      <td>${r.id_cliente}</td><td>${r.nombre}</td><td>${r.dir_calle_ciudad||''}</td>
+      <td>${r.id_cliente}</td><td>${r.nombre}</td>
+      <td>${r.dir_calle_ciudad||''} ${r.dir_calle_ciudad ? `<button class="btn-map-icon" onclick="openMapModal('${(r.nombre||'').replace(/'/g,"\'")}', '${(r.dir_calle_ciudad||'').replace(/'/g,"\'")} ${r.dir_cp||''}')" title="Ver en mapa">📍</button>` : ''}</td>
       <td>${r.dir_cp||''}</td><td>${r.correo||''}</td><td>${r.tipo_cliente}</td><td>${r.tipo_atencion}</td>
       ${delBtn(`delCliente(${r.id_cliente})`)}
     </tr>`;
@@ -1531,6 +1597,49 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 // Despertar el servidor al cargar la página
 fetch(`${API}/usuarios`).catch(() => {});
+
+// ── MAPA ─────────────────────────────────────
+function openMapModal(nombre, direccion) {
+  const query = encodeURIComponent(direccion);
+  const iframe = document.getElementById('mapIframe');
+  const title = document.getElementById('mapModalTitle');
+  const link = document.getElementById('mapExternalLink');
+
+  title.textContent = '📍 ' + nombre;
+  iframe.src = `https://maps.google.com/maps?q=${query}&output=embed&z=15`;
+  link.href = `https://www.google.com/maps/search/?api=1&query=${query}`;
+
+  document.getElementById('mapModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMapModal() {
+  document.getElementById('mapModal').classList.remove('open');
+  document.getElementById('mapIframe').src = '';
+  document.body.style.overflow = '';
+}
+
+// Cerrar modal al hacer clic fuera
+document.getElementById('mapModal').addEventListener('click', function(e) {
+  if (e.target === this) closeMapModal();
+});
 </script>
+
+<!-- ── MODAL MAPA ───────────────────────────── -->
+<div class="map-modal-overlay" id="mapModal">
+  <div class="map-modal-box">
+    <div class="map-modal-header">
+      <h3 id="mapModalTitle">Ubicación</h3>
+      <button class="map-modal-close" onclick="closeMapModal()">✕</button>
+    </div>
+    <div class="map-iframe-wrap">
+      <iframe id="mapIframe" src="" allowfullscreen loading="lazy"></iframe>
+    </div>
+    <div class="map-modal-footer">
+      <a id="mapExternalLink" href="#" target="_blank" class="btn-maps">📍 Abrir en Google Maps</a>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
