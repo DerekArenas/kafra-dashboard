@@ -48,7 +48,7 @@ Render PostgreSQL 18 — kafra-db
 
 ---
 
-## 📚 Desarrollo del Proyecto — Prácticas
+## 📚 Desarrollo del Proyecto 
 
 ### Modelo Entidad-Relación
 
