@@ -313,6 +313,10 @@ UPDATE usuarios SET activo = false WHERE usuario = 'nombre';
 | Username | `kafra_db_user` |
 
 ---
+Repositorio del curso:
+
+https://github.com/gabrielhuav/DB-Coursework-2026-2/
+
 
 ## 📖 Bibliografía
 
