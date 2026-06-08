@@ -51,8 +51,6 @@ Render PostgreSQL 18 — kafra-db
 ## 📚 Desarrollo del Proyecto — Prácticas
 
  Modelo Entidad-Relación
-![Diagrama ER](https://github.com/DerekArenas/kafra-dashboard/blob/main/Diagrame%20ER.jpeg?raw=true)
-
 
 #### Caso de estudio
 Para el caso de estudio se hizo entrevista  con el padre de Diego Carrillo, dueño de una distribuidora de abarrotes . De la entrevista se obtuvo la siguiente información:
@@ -83,8 +81,6 @@ Se identificaron las siguientes entidades:
 
 
 — Modelo Entidad-Relación Extendido
-
-![Diagrama EER](Diagrama_EER.jpeg)  
 
 #### Limitaciones del modelo básico
 El modelo entidad relacion tenía cuatro limitaciones principales:
@@ -129,8 +125,6 @@ Se identificó entre Distribuidora, Proveedor y Producto. El mismo producto pued
 ---
 
  Transformación al Modelo Relacional
-
-![Diagrama Relacional](Diagrama_Relacional.png)
 
 Se eligió la estrategia de **tabla por subtipo** para ambas jerarquías. La tabla del supertipo almacena los atributos comunes y cada subtipo tiene su propia tabla con sus atributos específicos más una FK hacia el supertipo. Esta decisión evita los valores nulos que existían en la práctica 1, donde el RFC quedaba vacío para clientes sin factura.
 
