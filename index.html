@@ -1269,6 +1269,11 @@ function show(id) {
 
 function v(id) { return document.getElementById(id).value.trim(); }
 
+function soloConsulta() {
+  if (rolActual === 'consulta') return true;
+  return false;
+}
+
 function setErr(key, msg) {
   const el = document.getElementById('err_' + key);
   if (el) el.textContent = msg ? '⚠ ' + msg : '';
@@ -1350,6 +1355,7 @@ async function cargarCliente() {
   });
 }
 async function addCliente() {
+  if (soloConsulta()) return;
   setErr('cliente', '');
   try {
     await apiPost('/cliente', { nombre: v('c_nombre'), dir_calle_ciudad: v('c_dir'), dir_cp: v('c_cp'), correo: v('c_correo'), tipo_cliente: v('c_tipo'), tipo_atencion: v('c_atencion') });
@@ -1357,7 +1363,7 @@ async function addCliente() {
     cargarCliente();
   } catch(e) { setErr('cliente', e.message); }
 }
-async function delCliente(id) { await apiDelete('/cliente/' + id); cargarCliente(); }
+async function delCliente(id) { if (soloConsulta()) return; await apiDelete('/cliente/' + id); cargarCliente(); }
 
 // ── DISTRIBUIDORA
 async function cargarDistribuidora() {
@@ -1385,6 +1391,7 @@ async function cargarClienteFactura() {
   });
 }
 async function addClienteFactura() {
+  if (soloConsulta()) return;
   setErr('clienteFactura', '');
   try {
     await apiPost('/clientefactura', { id_cliente: v('cf_id'), rfc: v('cf_rfc') });
@@ -1392,7 +1399,7 @@ async function addClienteFactura() {
     cargarClienteFactura();
   } catch(e) { setErr('clienteFactura', e.message); }
 }
-async function delClienteFactura(id) { await apiDelete('/clientefactura/' + id); cargarClienteFactura(); }
+async function delClienteFactura(id) { if (soloConsulta()) return; await apiDelete('/clientefactura/' + id); cargarClienteFactura(); }
 
 // ── CLIENTE SIN FACTURA
 async function cargarClienteSinFactura() {
@@ -1404,6 +1411,7 @@ async function cargarClienteSinFactura() {
   });
 }
 async function addClienteSinFactura() {
+  if (soloConsulta()) return;
   setErr('clienteSinFactura', '');
   try {
     await apiPost('/clientesinfactura', { id_cliente: v('csf_id') });
@@ -1411,7 +1419,7 @@ async function addClienteSinFactura() {
     cargarClienteSinFactura();
   } catch(e) { setErr('clienteSinFactura', e.message); }
 }
-async function delClienteSinFactura(id) { await apiDelete('/clientesinfactura/' + id); cargarClienteSinFactura(); }
+async function delClienteSinFactura(id) { if (soloConsulta()) return; await apiDelete('/clientesinfactura/' + id); cargarClienteSinFactura(); }
 
 // ── PROVEEDOR
 async function cargarProveedor() {
@@ -1423,6 +1431,7 @@ async function cargarProveedor() {
   });
 }
 async function addProveedor() {
+  if (soloConsulta()) return;
   setErr('proveedor', '');
   try {
     await apiPost('/proveedor', { nombre: v('pr_nombre'), rfc: v('pr_rfc'), contacto: v('pr_contacto') });
@@ -1430,7 +1439,7 @@ async function addProveedor() {
     cargarProveedor();
   } catch(e) { setErr('proveedor', e.message); }
 }
-async function delProveedor(id) { await apiDelete('/proveedor/' + id); cargarProveedor(); }
+async function delProveedor(id) { if (soloConsulta()) return; await apiDelete('/proveedor/' + id); cargarProveedor(); }
 
 // ── PRODUCTO
 async function cargarProducto() {
@@ -1442,6 +1451,7 @@ async function cargarProducto() {
   });
 }
 async function addProducto() {
+  if (soloConsulta()) return;
   setErr('producto', '');
   try {
     await apiPost('/producto', { nombre: v('p_nombre'), codigo_barras: v('p_codigo'), precio_venta: v('p_precio'), stock: v('p_stock') });
@@ -1449,7 +1459,7 @@ async function addProducto() {
     cargarProducto();
   } catch(e) { setErr('producto', e.message); }
 }
-async function delProducto(id) { await apiDelete('/producto/' + id); cargarProducto(); }
+async function delProducto(id) { if (soloConsulta()) return; await apiDelete('/producto/' + id); cargarProducto(); }
 
 // ── TRABAJADOR
 async function cargarTrabajador() {
@@ -1461,6 +1471,7 @@ async function cargarTrabajador() {
   });
 }
 async function addTrabajador() {
+  if (soloConsulta()) return;
   setErr('trabajador', '');
   try {
     await apiPost('/trabajador', { nombre: v('tr_nombre'), curp: v('tr_curp'), sueldo: v('tr_sueldo'), id_distribuidora: v('tr_distrib') });
@@ -1468,7 +1479,7 @@ async function addTrabajador() {
     cargarTrabajador();
   } catch(e) { setErr('trabajador', e.message); }
 }
-async function delTrabajador(id) { await apiDelete('/trabajador/' + id); cargarTrabajador(); }
+async function delTrabajador(id) { if (soloConsulta()) return; await apiDelete('/trabajador/' + id); cargarTrabajador(); }
 
 // ── TRABAJADOR INTERNO
 async function cargarTrabajadorInterno() {
@@ -1480,6 +1491,7 @@ async function cargarTrabajadorInterno() {
   });
 }
 async function addTrabajadorInterno() {
+  if (soloConsulta()) return;
   setErr('trabajadorInterno', '');
   try {
     await apiPost('/trabajadorinterno', { id_trabajador: v('ti_id'), turno: v('ti_turno') });
@@ -1487,7 +1499,7 @@ async function addTrabajadorInterno() {
     cargarTrabajadorInterno();
   } catch(e) { setErr('trabajadorInterno', e.message); }
 }
-async function delTrabajadorInterno(id) { await apiDelete('/trabajadorinterno/' + id); cargarTrabajadorInterno(); }
+async function delTrabajadorInterno(id) { if (soloConsulta()) return; await apiDelete('/trabajadorinterno/' + id); cargarTrabajadorInterno(); }
 
 // ── REPARTIDOR
 async function cargarRepartidor() {
@@ -1499,6 +1511,7 @@ async function cargarRepartidor() {
   });
 }
 async function addRepartidor() {
+  if (soloConsulta()) return;
   setErr('repartidor', '');
   try {
     await apiPost('/repartidor', { id_trabajador: v('rep_id') });
@@ -1506,7 +1519,7 @@ async function addRepartidor() {
     cargarRepartidor();
   } catch(e) { setErr('repartidor', e.message); }
 }
-async function delRepartidor(id) { await apiDelete('/repartidor/' + id); cargarRepartidor(); }
+async function delRepartidor(id) { if (soloConsulta()) return; await apiDelete('/repartidor/' + id); cargarRepartidor(); }
 
 // ── COMPRA
 async function cargarCompra() {
@@ -1518,6 +1531,7 @@ async function cargarCompra() {
   });
 }
 async function addCompra() {
+  if (soloConsulta()) return;
   setErr('compra', '');
   try {
     await apiPost('/compra', { id_cliente: v('co_cliente'), fecha: v('co_fecha'), total: v('co_total') });
@@ -1525,7 +1539,7 @@ async function addCompra() {
     cargarCompra();
   } catch(e) { setErr('compra', e.message); }
 }
-async function delCompra(id) { await apiDelete('/compra/' + id); cargarCompra(); }
+async function delCompra(id) { if (soloConsulta()) return; await apiDelete('/compra/' + id); cargarCompra(); }
 
 // ── DETALLE
 async function cargarDetalle() {
@@ -1537,6 +1551,7 @@ async function cargarDetalle() {
   });
 }
 async function addDetalle() {
+  if (soloConsulta()) return;
   setErr('detalle', '');
   try {
     await apiPost('/detalle', { id_compra: v('d_compra'), id_producto: v('d_producto'), cantidad: v('d_cantidad'), precio_unitario: v('d_precio') });
@@ -1544,7 +1559,7 @@ async function addDetalle() {
     cargarDetalle();
   } catch(e) { setErr('detalle', e.message); }
 }
-async function delDetalle(comp, prod) { await apiDelete(`/detalle/${comp}/${prod}`); cargarDetalle(); }
+async function delDetalle(comp, prod) { if (soloConsulta()) return; await apiDelete(`/detalle/${comp}/${prod}`); cargarDetalle(); }
 
 // ── SUMINISTRO
 async function cargarSuministro() {
@@ -1556,6 +1571,7 @@ async function cargarSuministro() {
   });
 }
 async function addSuministro() {
+  if (soloConsulta()) return;
   setErr('suministro', '');
   try {
     await apiPost('/suministro', { id_distribuidora: v('s_distrib'), id_proveedor: v('s_proveedor'), id_producto: v('s_producto'), fecha_suministro: v('s_fecha'), cantidad_recibida: v('s_cantidad'), precio_adquisicion: v('s_precio_adq') });
@@ -1563,7 +1579,7 @@ async function addSuministro() {
     cargarSuministro();
   } catch(e) { setErr('suministro', e.message); }
 }
-async function delSuministro(dis, prov, prod, fecha) { await apiDelete(`/suministro/${dis}/${prov}/${prod}/${fecha}`); cargarSuministro(); }
+async function delSuministro(dis, prov, prod, fecha) { if (soloConsulta()) return; await apiDelete(`/suministro/${dis}/${prov}/${prod}/${fecha}`); cargarSuministro(); }
 
 // ── TEL CLIENTE
 async function cargarTelCliente() {
@@ -1575,6 +1591,7 @@ async function cargarTelCliente() {
   });
 }
 async function addTelCliente() {
+  if (soloConsulta()) return;
   setErr('telCliente', '');
   try {
     await apiPost('/telcliente', { id_cliente: v('tc_id'), telefono: v('tc_tel') });
@@ -1582,7 +1599,7 @@ async function addTelCliente() {
     cargarTelCliente();
   } catch(e) { setErr('telCliente', e.message); }
 }
-async function delTelCliente(id) { await apiDelete('/telcliente/' + id); cargarTelCliente(); }
+async function delTelCliente(id) { if (soloConsulta()) return; await apiDelete('/telcliente/' + id); cargarTelCliente(); }
 
 // ── TEL TRABAJADOR
 async function cargarTelTrabajador() {
@@ -1594,6 +1611,7 @@ async function cargarTelTrabajador() {
   });
 }
 async function addTelTrabajador() {
+  if (soloConsulta()) return;
   setErr('telTrabajador', '');
   try {
     await apiPost('/teltrabajador', { id_trabajador: v('tt_id'), telefono: v('tt_tel') });
@@ -1601,7 +1619,7 @@ async function addTelTrabajador() {
     cargarTelTrabajador();
   } catch(e) { setErr('telTrabajador', e.message); }
 }
-async function delTelTrabajador(id) { await apiDelete('/teltrabajador/' + id); cargarTelTrabajador(); }
+async function delTelTrabajador(id) { if (soloConsulta()) return; await apiDelete('/teltrabajador/' + id); cargarTelTrabajador(); }
 
 // ── DASHBOARD / INICIO
 async function cargarDashboard() {
