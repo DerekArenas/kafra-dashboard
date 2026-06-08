@@ -577,7 +577,7 @@
     font-weight: 500;
   }
   .map-inline-link:hover { text-decoration: underline; }
-  td.td-dir { min-width: 220px; }
+  td.td-dir { min-width: 260px; }
 
   /* ─── SCROLLBAR ──────────────────────────── */
   ::-webkit-scrollbar { width: 5px; height: 5px; }
@@ -1818,7 +1818,6 @@ async function doLogin() {
     const data = await res.json();
 
     if (res.ok && data.ok) {
-      // Guardar sesión
       sessionStorage.setItem('kafra_rol', data.usuario.rol || 'consulta');
       sessionStorage.setItem('kafra_usuario', data.usuario.nombre || data.usuario.usuario || 'Usuario');
       const overlay = document.getElementById('loginOverlay');
@@ -1844,7 +1843,6 @@ window.addEventListener('DOMContentLoaded', () => {
   const rol     = sessionStorage.getItem('kafra_rol');
   const usuario = sessionStorage.getItem('kafra_usuario');
   if (rol && usuario) {
-    // Sesión activa — saltar login
     const overlay = document.getElementById('loginOverlay');
     overlay.style.display = 'none';
     document.body.classList.remove('login-active');
