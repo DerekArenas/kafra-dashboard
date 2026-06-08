@@ -1719,7 +1719,15 @@ function aplicarPermisos(rol, nombreUsuario) {
   });
 
   if (rol === 'consulta') {
-    document.querySelectorAll('.btn-accion').forEach(btn => btn.style.display = 'none');
+    document.querySelectorAll('.btn-accion').forEach(btn => {
+      btn.disabled = true;
+      btn.style.opacity = '0.35';
+      btn.style.cursor = 'not-allowed';
+      btn.style.pointerEvents = 'none';
+    });
+    document.querySelectorAll('input, select').forEach(el => {
+      el.disabled = true;
+    });
   }
 
   cargarDashboard();
