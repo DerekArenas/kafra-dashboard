@@ -21,7 +21,7 @@ Proyecto de sistema web de gestión para la distribuidora Kafra
 
 ## 🗂️ Estructura del repositorio
 
-
+```
 kafra-dashboard/
 ├── index.html     ← Página web completa (frontend)
 ├── server.js      ← API backend (Node.js + Express)
@@ -50,12 +50,13 @@ Render PostgreSQL 18 — kafra-db
 
 ## 📚 Desarrollo del Proyecto — Prácticas
 
- Modelo Entidad-Relación
+### Modelo Entidad-Relación
 
-![Diagrama ER](https://github.com/user-attachments/assets/e7b554f0-c38c-468a-ba84-30c6c42bda98)
+![Diagrama ER](https://github.com/user-attachments/assets/d7e5b292-08ee-4285-897d-8f4c10bbf73f)
 
 #### Caso de estudio
-Para el caso de estudio se hizo entrevista  con el padre de Diego Carrillo, dueño de una distribuidora de abarrotes . De la entrevista se obtuvo la siguiente información:
+
+Para el caso de estudio se hizo entrevista con el padre de Diego Carrillo, dueño de una distribuidora de abarrotes. De la entrevista se obtuvo la siguiente información:
 
 - La distribuidora se dedica a la distribución de frutas, verduras, productos de limpieza y cremería
 - Es una empresa pequeña con 10 empleados, 30 clientes fijos y algunos ocasionales, además de más de 20 proveedores
@@ -63,8 +64,10 @@ Para el caso de estudio se hizo entrevista  con el padre de Diego Carrillo, due�
 - Para clientes con factura se registra el RFC; para los demás solo nombre, dirección y teléfono
 - Los clientes se clasifican en dos grupos: clientes de entrega a domicilio y clientes de mostrador
 
- Entidades y atributos identificados
+#### Entidades y atributos identificados
+
 Se identificaron las siguientes entidades:
+
 | Entidad | Atributos |
 |---|---|
 | **Producto** | ID_Producto, Nombre, Código de barras, Precio, Peso, Tipo |
@@ -80,11 +83,14 @@ Se identificaron las siguientes entidades:
 | Distribuidora — Consigue — Producto | 1:N | Una distribuidora consigue muchos productos |
 | Distribuidora — Contrata — Trabajadores | 1:N | Una distribuidora contrata a todos sus trabajadores |
 
+---
 
+### Modelo Entidad-Relación Extendido
 
-— Modelo Entidad-Relación Extendido
+![Diagrama EER](https://github.com/user-attachments/assets/8aef85b7-bab7-463c-9a14-65f3fec15eeb)
 
 #### Limitaciones del modelo básico
+
 El modelo entidad relacion tenía cuatro limitaciones principales:
 
 1. **Sin generalizaciones ni especializaciones**: el atributo `tipo_cliente` distinguía entre tipos pero no podía expresar esta diferencia estructuralmente. El RFC quedaba vacío para clientes sin factura.
@@ -95,6 +101,7 @@ El modelo entidad relacion tenía cuatro limitaciones principales:
 #### Nuevos elementos del modelo extendido
 
 **Entidad nueva: Proveedor**
+
 Se agregó Proveedor como entidad independiente, ya que en el modelo básico era imposible registrar con quién se hacían los suministros.
 
 **Entidades débiles identificadas:**
@@ -106,13 +113,13 @@ Se agregó Proveedor como entidad independiente, ya que en el modelo básico era
 *Cliente* se especializa en:
 - `ClienteConFactura` — agrega RFC y Razón Social. Especialización **disjunta, total, por condición** (atributo `Tipo_Cliente`)
 - `ClienteSinFactura` — solo requiere nombre, dirección y teléfono
-  - Ambos subtipos se subclasifican en `ClienteEntrega` y `ClienteMostrador`
 
 *Trabajador* se especializa en:
 - `RepartidorConseguidor` — agrega Zona de reparto y Tipo de vehículo
 - `TrabajadorInterno` — agrega Área asignada y Turno. Especialización **disjunta, parcial, definida por el usuario**
 
-**Relación  — Suministro:**
+**Relación Suministro:**
+
 Se identificó entre Distribuidora, Proveedor y Producto. El mismo producto puede ser suministrado por distintos proveedores a precios diferentes. Sus atributos propios son: fecha de suministro, cantidad recibida y precio de adquisición.
 
 **Cardinalidades mínimas y máximas:**
@@ -126,50 +133,55 @@ Se identificó entre Distribuidora, Proveedor y Producto. El mismo producto pued
 
 ---
 
- Transformación al Modelo Relacional
+### Transformación al Modelo Relacional
+
+![Diagrama Relacional](https://github.com/user-attachments/assets/747f64ec-1c1b-41d5-acab-9ec62236db60)
 
 Se eligió la estrategia de **tabla por subtipo** para ambas jerarquías. La tabla del supertipo almacena los atributos comunes y cada subtipo tiene su propia tabla con sus atributos específicos más una FK hacia el supertipo. Esta decisión evita los valores nulos que existían en la práctica 1, donde el RFC quedaba vacío para clientes sin factura.
 
 #### Tablas generadas y sus decisiones de diseño
 
 **Tabla Distribuidora**
-
+```
 ID_Distribuidora (PK), Nombre, RFC (UNIQUE), Dir_Calle, Dir_Numero,
 Dir_Colonia, Dir_Ciudad, Dir_CP, Telefono, Correo (UNIQUE)
 ```
 
 **Tabla Cliente** (supertipo)
-
+```
 ID_Cliente (PK), Nombre, Dir_Calle, Dir_Numero, Dir_Colonia,
 Dir_Ciudad, Dir_CP, Correo, Tipo_Cliente (ENUM), Tipo_Atencion (ENUM)
 ```
+
 > El RFC se movió a `ClienteConFactura` y desapareció de la tabla general, eliminando los nulos del modelo básico.
 
 **Tabla Trabajador** (supertipo)
-
+```
 ID_Trabajador (PK), Nombre, Dir_Calle, Dir_Numero, Dir_Colonia,
 Dir_Ciudad, Dir_CP, Correo, Sueldo, ID_Distribuidora (FK)
 ```
 
-**Tablas de atributos :**
-
+**Tablas de atributos multivaluados:**
+```
 Telefonos_Cliente (ID_Cliente FK, Telefono) -- PK compuesta
 Telefonos_Trabajador (ID_Trabajador FK, Telefono) -- PK compuesta
 ```
 
 **Tabla asociativa DetalleCompra:**
-
+```
 ID_Compra (FK), ID_Producto (FK), Cantidad DEFAULT 1,
 Precio_Unitario, Subtotal
 -- PK compuesta (ID_Compra, ID_Producto)
 ```
 
-**Tabla Suministro :**
+**Tabla Suministro:**
+```
 ID_Distribuidora (FK), ID_Proveedor (FK), ID_Producto (FK),
 Fecha_Suministro, Cantidad_Recibida, Precio_Adquisicion
 -- PK compuesta de las 4 columnas
 ```
 
+**Propagación de llaves foráneas:**
 - `ID_Distribuidora` se propagó hacia `Trabajador` y `Suministro`
 - `ID_Cliente` se propagó hacia `Compra`
 - `ID_Compra` e `ID_Producto` forman la clave compuesta de `DetalleCompra`
@@ -186,7 +198,7 @@ Fecha_Suministro, Cantidad_Recibida, Precio_Adquisicion
 
 ---
 
-DDL, Restricciones de Dominio y DCL
+### DDL, Restricciones de Dominio y DCL
 
 #### Configuración del SGBD
 - **Sistema:** PostgreSQL 18.2
@@ -195,6 +207,7 @@ DDL, Restricciones de Dominio y DCL
 - **Collation:** English_United States.932 — asignado por el instalador según la configuración regional del sistema
 
 #### Justificación de PostgreSQL
+
 Se eligió PostgreSQL por tres razones: soporte completo para restricciones avanzadas (PRIMARY KEY, FOREIGN KEY, UNIQUE, NOT NULL, CHECK, DEFERRABLE), características de seguridad robustas (autenticación scram-sha-256, GRANT/REVOKE, Row-Level Security), y facilidad de uso con pgAdmin 4.
 
 #### Restricciones DEFAULT implementadas y justificadas
@@ -230,6 +243,7 @@ Se implementaron roles con permisos diferenciados:
 
 ---
 
+## 🔐 Roles y permisos del sistema web
 
 | Rol | Acceso |
 |---|---|
@@ -241,6 +255,7 @@ Se implementaron roles con permisos diferenciados:
 | **Consulta** | Solo lectura, sin botones de acción |
 
 Para administrar usuarios desde pgAdmin:
+
 ```sql
 -- Agregar usuario
 INSERT INTO usuarios (usuario, password, nombre, rol)
@@ -275,7 +290,7 @@ UPDATE usuarios SET activo = false WHERE usuario = 'nombre';
 | `tel_cliente` | Teléfonos de clientes (atributo multivaluado) |
 | `tel_trabajador` | Teléfonos de trabajadores (atributo multivaluado) |
 
-
+---
 
 ## 🛠️ Tecnologías utilizadas
 
@@ -287,7 +302,6 @@ UPDATE usuarios SET activo = false WHERE usuario = 'nombre';
 | GitHub Pages | Hosting del frontend (archivos estáticos) |
 | Render | Hosting del backend y la base de datos en la nube |
 | pgAdmin 4 | Administración visual de la base de datos |
-
 
 ### Conectarse con pgAdmin
 
