@@ -362,7 +362,6 @@
 
   /* ─── MEJORAS VISUALES ───────────────────── */
 
-  /* Línea accent en sidebar activo */
   aside button.active {
     background: rgba(232,201,109,0.10);
     color: var(--accent);
@@ -371,17 +370,14 @@
     padding-left: 10px;
   }
 
-  /* Separador sutil en header */
   header {
     box-shadow: 0 1px 0 var(--border), 0 4px 24px rgba(0,0,0,0.2);
   }
 
-  /* Glow suave en logo */
   .logo-mark {
     box-shadow: 0 0 16px rgba(232,201,109,0.25);
   }
 
-  /* Tablas más refinadas */
   table {
     border-collapse: separate;
     border-spacing: 0;
@@ -417,19 +413,16 @@
     border-bottom: none;
   }
 
-  /* Form card con borde top accent */
   .form-card {
     border-top: 2px solid var(--accent);
     box-shadow: 0 2px 16px rgba(0,0,0,0.15);
   }
 
-  /* Inputs con focus más visible */
   input:focus, select:focus {
     border-color: var(--accent) !important;
     box-shadow: 0 0 0 3px rgba(232,201,109,0.08) !important;
   }
 
-  /* Botón primary más refinado */
   .btn-primary {
     position: relative;
     overflow: hidden;
@@ -442,7 +435,6 @@
     pointer-events: none;
   }
 
-  /* Sección header con línea decorativa */
   .section-header h2::before {
     content: '';
     display: inline-block;
@@ -454,12 +446,10 @@
     flex-shrink: 0;
   }
 
-  /* Table wrapper con sombra */
   .table-wrap {
     box-shadow: 0 4px 24px rgba(0,0,0,0.2);
   }
 
-  /* Nav group label con línea */
   .nav-group-label {
     display: flex;
     align-items: center;
@@ -497,10 +487,7 @@
     border-color: rgba(232,201,109,0.3);
     transform: translateY(-2px);
   }
-  .stat-card .stat-icon {
-    font-size: 22px;
-    margin-bottom: 4px;
-  }
+  .stat-card .stat-icon { font-size: 22px; margin-bottom: 4px; }
   .stat-card .stat-value {
     font-family: var(--font-head);
     font-size: 28px;
@@ -522,7 +509,6 @@
     margin-bottom: 32px;
   }
 
-  /* Welcome banner */
   .welcome-banner {
     background: linear-gradient(135deg, var(--surface) 0%, rgba(232,201,109,0.06) 100%);
     border: 1px solid rgba(232,201,109,0.2);
@@ -541,10 +527,7 @@
     margin-bottom: 4px;
   }
   .welcome-banner h2 span { color: var(--accent); }
-  .welcome-banner p {
-    font-size: 13px;
-    color: var(--text-muted);
-  }
+  .welcome-banner p { font-size: 13px; color: var(--text-muted); }
   .welcome-date {
     font-family: var(--font-head);
     font-size: 13px;
@@ -553,31 +536,49 @@
     flex-shrink: 0;
   }
 
+  /* ── MAPA INLINE en tabla ────────────────── */
+  .td-direccion {
+    min-width: 280px;
+    vertical-align: top;
+  }
 
-  /* ── MAPA INLINE ────────────────────────── */
+  .dir-text {
+    font-size: 13px;
+    color: var(--text);
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
+
   .map-inline-wrap {
-    margin-top: 6px;
-    border-radius: 6px;
+    border-radius: 8px;
     overflow: hidden;
     border: 1px solid var(--border);
-    height: 160px;
+    height: 150px;
+    background: var(--bg);
+    position: relative;
   }
+
   .map-inline-wrap iframe {
     width: 100%;
     height: 100%;
     border: none;
     display: block;
+    filter: grayscale(30%) contrast(1.05);
   }
+
   .map-inline-link {
-    display: inline-block;
-    margin-top: 5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 6px;
     font-size: 11px;
     color: var(--accent2);
     text-decoration: none;
     font-weight: 500;
+    opacity: 0.8;
+    transition: opacity 0.2s;
   }
-  .map-inline-link:hover { text-decoration: underline; }
-  td.td-dir { min-width: 260px; }
+  .map-inline-link:hover { opacity: 1; text-decoration: underline; }
 
   /* ─── SCROLLBAR ──────────────────────────── */
   ::-webkit-scrollbar { width: 5px; height: 5px; }
@@ -710,7 +711,6 @@
     text-align: center;
   }
 
-  /* Bloquea el scroll del fondo mientras está el login */
   body.login-active { overflow: hidden; }
 
   /* ─── KPI CARDS ──────────────────────────── */
@@ -774,11 +774,7 @@
     .dashboard-cols { grid-template-columns: 1fr; }
   }
 
-  .dash-panel {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
+  .dash-panel { display: flex; flex-direction: column; gap: 10px; }
 
   .dash-panel-header {
     display: flex;
@@ -801,74 +797,8 @@
     border: 1px solid var(--border);
   }
 
-  /* Stock bajo highlight */
   .stock-critico td:last-child { color: var(--danger) !important; font-weight: 600; }
   .stock-bajo td:last-child { color: #f97316 !important; font-weight: 500; }
-
-  /* ── MODAL MAPA ─────────────────────────── */
-  .map-modal-overlay {
-    position: fixed; inset: 0; z-index: 9999;
-    background: rgba(0,0,0,0.7);
-    display: flex; align-items: center; justify-content: center;
-    opacity: 0; pointer-events: none;
-    transition: opacity 0.25s;
-  }
-  .map-modal-overlay.open { opacity: 1; pointer-events: all; }
-  .map-modal-box {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 20px;
-    width: 100%; max-width: 560px;
-    position: relative;
-  }
-  .map-modal-header {
-    display: flex; align-items: center;
-    justify-content: space-between;
-    margin-bottom: 12px;
-  }
-  .map-modal-header h3 {
-    font-size: 15px; font-weight: 600;
-    color: var(--text);
-  }
-  .map-modal-close {
-    background: none; border: none;
-    color: var(--text-muted); font-size: 18px;
-    cursor: pointer; transition: color 0.2s;
-  }
-  .map-modal-close:hover { color: var(--text); }
-  .map-iframe-wrap {
-    border-radius: 8px; overflow: hidden;
-    border: 1px solid var(--border);
-    height: 300px;
-  }
-  .map-iframe-wrap iframe {
-    width: 100%; height: 100%; border: none;
-  }
-  .map-modal-footer {
-    margin-top: 12px;
-    display: flex; gap: 10px; justify-content: flex-end;
-  }
-  .btn-maps {
-    padding: 8px 16px;
-    background: var(--accent2);
-    color: #fff; border: none;
-    border-radius: 7px; font-size: 13px;
-    font-weight: 600; cursor: pointer;
-    transition: opacity 0.2s;
-    text-decoration: none;
-    display: inline-block;
-  }
-  .btn-maps:hover { opacity: 0.85; }
-  .btn-map-icon {
-    background: none; border: none;
-    cursor: pointer; font-size: 16px;
-    padding: 2px 6px; border-radius: 5px;
-    transition: background 0.15s;
-    color: var(--accent2);
-  }
-  .btn-map-icon:hover { background: var(--border); }
-
 </style>
 </head>
 
@@ -967,7 +897,6 @@
 
     <!-- INICIO -->
     <div id="inicio" class="section active">
-      <!-- WELCOME BANNER -->
       <div class="welcome-banner">
         <div>
           <h2 id="welcomeMsg">👋 Bienvenido, <span id="welcomeName">—</span></h2>
@@ -979,7 +908,6 @@
         </div>
       </div>
 
-      <!-- KPI CARDS -->
       <div class="kpi-grid">
         <div class="kpi-card">
           <div class="kpi-icon">💳</div>
@@ -1012,7 +940,6 @@
       </div>
 
       <div class="dashboard-cols">
-        <!-- STOCK BAJO -->
         <div class="dash-panel">
           <div class="dash-panel-header">
             <span>⚠️ Productos con stock bajo</span>
@@ -1026,7 +953,6 @@
           </div>
         </div>
 
-        <!-- ÚLTIMAS VENTAS -->
         <div class="dash-panel">
           <div class="dash-panel-header">
             <span>💳 Últimas ventas</span>
@@ -1067,7 +993,7 @@
       </div>
       <div class="table-wrapper">
         <table>
-          <thead><tr><th>ID</th><th>Nombre</th><th>Dirección</th><th>CP</th><th>Correo</th><th>Tipo</th><th>Atención</th><th></th></tr></thead>
+          <thead><tr><th>ID</th><th>Nombre</th><th>Dirección y Mapa</th><th>CP</th><th>Correo</th><th>Tipo</th><th>Atención</th><th></th></tr></thead>
           <tbody id="t_cliente"></tbody>
         </table>
       </div>
@@ -1376,39 +1302,49 @@ document.querySelectorAll('input[type="date"]').forEach(el => {
   el.value = new Date().toISOString().split('T')[0];
 });
 
-// ── DISTRIBUIDORA
-async function cargarDistribuidora() {
-  const rows = await apiGet('/distribuidora');
-  const tb = document.getElementById('t_distribuidora');
-  tb.innerHTML = '';
-  rows.forEach(r => {
-    tb.innerHTML += `<tr>
-      <td>${r.nombre}</td><td>${r.rfc}</td><td>${r.dir_calle_ciudad}</td>
-      <td>${r.dir_cp}</td><td>${r.telefono||''}</td><td>${r.correo||''}</td>
-      ${delBtn(`delDistribuidora(${r.id_distribuidora})`)}
-    </tr>`;
-  });
-}
-async function addDistribuidora() {
-  setErr('distribuidora', '');
-  try {
-    await apiPost('/distribuidora', { nombre: v('dis_nombre'), rfc: v('dis_rfc'), dir_calle_ciudad: v('dis_dir'), dir_cp: v('dis_cp'), telefono: v('dis_tel'), correo: v('dis_correo') });
-    ['dis_nombre','dis_rfc','dis_dir','dis_cp','dis_tel','dis_correo'].forEach(id => document.getElementById(id).value='');
-    cargarDistribuidora();
-  } catch(e) { setErr('distribuidora', e.message); }
-}
-async function delDistribuidora(id) { await apiDelete('/distribuidora/' + id); cargarDistribuidora(); }
-
-// ── CLIENTE
+// ── CLIENTE ── (con mapa inline)
 async function cargarCliente() {
   const rows = await apiGet('/cliente');
   const tb = document.getElementById('t_cliente');
   tb.innerHTML = '';
   rows.forEach(r => {
+    const direccion = r.dir_calle_ciudad || '';
+    const cp = r.dir_cp || '';
+    const fullAddr = (direccion + ' ' + cp).trim();
+    const query = encodeURIComponent(fullAddr);
+
+    // Celda de dirección: texto + mapa inline si hay dirección
+    let mapCell = '';
+    if (fullAddr) {
+      mapCell = `
+        <td class="td-direccion">
+          <div class="dir-text">📍 ${direccion}${cp ? ', CP ' + cp : ''}</div>
+          <div class="map-inline-wrap">
+            <iframe
+              src="https://maps.google.com/maps?q=${query}&output=embed&z=15"
+              allowfullscreen
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+          <a class="map-inline-link"
+             href="https://www.google.com/maps/search/?api=1&query=${query}"
+             target="_blank">
+            ↗ Abrir en Google Maps
+          </a>
+        </td>`;
+    } else {
+      mapCell = `<td class="td-direccion"><span style="color:var(--text-muted);font-size:12px">Sin dirección</span></td>`;
+    }
+
     tb.innerHTML += `<tr>
-      <td>${r.id_cliente}</td><td>${r.nombre}</td>
-      <td>${r.dir_calle_ciudad||''} ${r.dir_calle_ciudad ? `<button class="btn-map-icon" onclick="openMapModal('${(r.nombre||'').replace(/'/g,"\'")}', '${(r.dir_calle_ciudad||'').replace(/'/g,"\'")} ${r.dir_cp||''}')" title="Ver en mapa">📍</button>` : ''}</td>
-      <td>${r.dir_cp||''}</td><td>${r.correo||''}</td><td>${r.tipo_cliente}</td><td>${r.tipo_atencion}</td>
+      <td>${r.id_cliente}</td>
+      <td>${r.nombre}</td>
+      ${mapCell}
+      <td>${cp}</td>
+      <td>${r.correo || ''}</td>
+      <td>${r.tipo_cliente}</td>
+      <td>${r.tipo_atencion}</td>
       ${delBtn(`delCliente(${r.id_cliente})`)}
     </tr>`;
   });
@@ -1422,6 +1358,22 @@ async function addCliente() {
   } catch(e) { setErr('cliente', e.message); }
 }
 async function delCliente(id) { await apiDelete('/cliente/' + id); cargarCliente(); }
+
+// ── DISTRIBUIDORA
+async function cargarDistribuidora() {
+  const rows = await apiGet('/distribuidora');
+  const tb = document.getElementById('t_distribuidora');
+  if (!tb) return;
+  tb.innerHTML = '';
+  rows.forEach(r => {
+    tb.innerHTML += `<tr>
+      <td>${r.nombre}</td><td>${r.rfc}</td><td>${r.dir_calle_ciudad}</td>
+      <td>${r.dir_cp}</td><td>${r.telefono||''}</td><td>${r.correo||''}</td>
+      ${delBtn(`delDistribuidora(${r.id_distribuidora})`)}
+    </tr>`;
+  });
+}
+async function delDistribuidora(id) { await apiDelete('/distribuidora/' + id); cargarDistribuidora(); }
 
 // ── CLIENTE CON FACTURA
 async function cargarClienteFactura() {
@@ -1654,13 +1606,11 @@ async function delTelTrabajador(id) { await apiDelete('/teltrabajador/' + id); c
 // ── DASHBOARD / INICIO
 async function cargarDashboard() {
   try {
-    // Compras / ventas
     const compras = await apiGet('/compra');
     const totalVentas = compras.reduce((sum, c) => sum + parseFloat(c.total || 0), 0);
     document.getElementById('kpi-ventas').textContent = '$' + totalVentas.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     document.getElementById('kpi-compras').textContent = compras.length;
 
-    // Últimas ventas (últimas 8)
     const ultimas = [...compras].sort((a,b) => (b.id_compra||0) - (a.id_compra||0)).slice(0, 8);
     const tbVentas = document.getElementById('t_ultimasventas');
     if (ultimas.length === 0) {
@@ -1676,7 +1626,6 @@ async function cargarDashboard() {
   }
 
   try {
-    // Clientes
     const clientes = await apiGet('/cliente');
     document.getElementById('kpi-clientes').textContent = clientes.length;
   } catch(e) {
@@ -1684,7 +1633,6 @@ async function cargarDashboard() {
   }
 
   try {
-    // Productos con stock bajo (≤ 10)
     const productos = await apiGet('/producto');
     const bajo = productos.filter(p => parseInt(p.stock||0) <= 10);
     document.getElementById('kpi-stockbajo').textContent = bajo.length;
@@ -1708,9 +1656,7 @@ cargarProveedor(); cargarProducto(); cargarTrabajador(); cargarTrabajadorInterno
 cargarRepartidor(); cargarCompra(); cargarDetalle(); cargarSuministro();
 cargarTelCliente(); cargarTelTrabajador();
 
-// ── LOGIN ─────────────────────────────────────────────
-// Cambia estas credenciales por las tuyas
-// ── ROLES Y PERMISOS ─────────────────────────────────
+// ── ROLES Y PERMISOS
 const PERMISOS = {
   admin:       ['inicio','cliente','clienteFactura','clienteSinFactura','proveedor','suministro','producto','compra','detalle','trabajador','trabajadorInterno','repartidor','telCliente','telTrabajador'],
   gerente:     ['inicio','cliente','clienteFactura','clienteSinFactura','proveedor','suministro','producto','compra','detalle','trabajador','trabajadorInterno','repartidor','telCliente','telTrabajador'],
@@ -1747,25 +1693,21 @@ function aplicarPermisos(rol, nombreUsuario) {
   usuarioActual = nombreUsuario || 'Usuario';
   const permitidas = PERMISOS[rol] || [];
 
-  // Actualizar welcome banner
   const nameEl = document.getElementById('welcomeName');
   const rolEl  = document.getElementById('welcomeRol');
   if (nameEl) nameEl.textContent = usuarioActual;
   if (rolEl)  rolEl.textContent  = `Rol: ${ROLES_LABEL[rol] || rol} — Sistema de gestión Kafra`;
   iniciarReloj();
 
-  // Mostrar nombre en el header también
   const badge = document.getElementById('userBadge');
   badge.textContent = usuarioActual;
   badge.className = 'user-badge ' + rol;
 
-  // Mostrar/ocultar botones del nav
   document.querySelectorAll('aside button[data-roles]').forEach(btn => {
     const roles = btn.getAttribute('data-roles').split(',');
     btn.style.display = roles.includes(rol) ? '' : 'none';
   });
 
-  // Ocultar labels de grupo si todos sus botones están ocultos
   document.querySelectorAll('.nav-group-label').forEach(label => {
     let next = label.nextElementSibling;
     let allHidden = true;
@@ -1776,15 +1718,11 @@ function aplicarPermisos(rol, nombreUsuario) {
     label.style.display = allHidden ? 'none' : '';
   });
 
-  // Ocultar botones de agregar/eliminar para rol consulta
   if (rol === 'consulta') {
     document.querySelectorAll('.btn-accion').forEach(btn => btn.style.display = 'none');
   }
 
-  // Cargar datos del dashboard
   cargarDashboard();
-
-  // Navegar a inicio
   show('inicio');
 }
 
@@ -1838,7 +1776,6 @@ async function doLogin() {
   }
 }
 
-// Mostrar login al cargar o restaurar sesión
 window.addEventListener('DOMContentLoaded', () => {
   const rol     = sessionStorage.getItem('kafra_rol');
   const usuario = sessionStorage.getItem('kafra_usuario');
@@ -1851,51 +1788,10 @@ window.addEventListener('DOMContentLoaded', () => {
     document.getElementById('loginUser').focus();
   }
 });
+
 // Despertar el servidor al cargar la página
 fetch(`${API}/usuarios`).catch(() => {});
-
-// ── MAPA ─────────────────────────────────────
-function openMapModal(nombre, direccion) {
-  const query = encodeURIComponent(direccion);
-  const iframe = document.getElementById('mapIframe');
-  const title = document.getElementById('mapModalTitle');
-  const link = document.getElementById('mapExternalLink');
-
-  title.textContent = '📍 ' + nombre;
-  iframe.src = `https://maps.google.com/maps?q=${query}&output=embed&z=15`;
-  link.href = `https://www.google.com/maps/search/?api=1&query=${query}`;
-
-  document.getElementById('mapModal').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeMapModal() {
-  document.getElementById('mapModal').classList.remove('open');
-  document.getElementById('mapIframe').src = '';
-  document.body.style.overflow = '';
-}
-
-// Cerrar modal al hacer clic fuera
-document.getElementById('mapModal').addEventListener('click', function(e) {
-  if (e.target === this) closeMapModal();
-});
 </script>
-
-<!-- ── MODAL MAPA ───────────────────────────── -->
-<div class="map-modal-overlay" id="mapModal">
-  <div class="map-modal-box">
-    <div class="map-modal-header">
-      <h3 id="mapModalTitle">Ubicación</h3>
-      <button class="map-modal-close" onclick="closeMapModal()">✕</button>
-    </div>
-    <div class="map-iframe-wrap">
-      <iframe id="mapIframe" src="" allowfullscreen loading="lazy"></iframe>
-    </div>
-    <div class="map-modal-footer">
-      <a id="mapExternalLink" href="#" target="_blank" class="btn-maps">📍 Abrir en Google Maps</a>
-    </div>
-  </div>
-</div>
 
 </body>
 </html>
