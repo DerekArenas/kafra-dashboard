@@ -51,7 +51,7 @@ Render PostgreSQL 18 — kafra-db
 ## 📚 Desarrollo del Proyecto — Prácticas
 
  Modelo Entidad-Relación
-<img width="936" height="477" alt="Image" src="https://github.com/user-attachments/assets/e7b554f0-c38c-468a-ba84-30c6c42bda98" />
+![Diagrama ER](https://github.com/user-attachments/assets/e7b554f0-c38c-468a-ba84-30c6c42bda98)
 #### Caso de estudio
 Para el caso de estudio se hizo entrevista  con el padre de Diego Carrillo, dueño de una distribuidora de abarrotes . De la entrevista se obtuvo la siguiente información:
 
