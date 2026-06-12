@@ -38,14 +38,34 @@ app.get('/api/cliente', async (req, res) => {
   res.json(r.rows);
 });
 app.post('/api/cliente', async (req, res) => {
-  const { nombre, dir_calle_ciudad, dir_cp, correo, tipo_cliente, tipo_atencion } = req.body;
+  const { nombre, dir_calle_ciudad, dir_cp, correo, tipo_cliente, tipo_atencion, rfc, razon_social } = req.body;
+  const client = await pool.connect();
   try {
-    const r = await pool.query(
+    await client.query('BEGIN');
+    // 1. Insertar en tabla principal
+    const r = await client.query(
       'INSERT INTO cliente (nombre, dir_calle_ciudad, dir_cp, correo, tipo_cliente, tipo_atencion) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *',
       [nombre, dir_calle_ciudad, dir_cp, correo, tipo_cliente, tipo_atencion]
     );
+    const id = r.rows[0].id_cliente;
+    // 2. Insertar automáticamente en el subtipo correspondiente
+    if (tipo_cliente === 'Con factura') {
+      if (!rfc) throw new Error('RFC requerido para clientes con factura');
+      await client.query(
+        'INSERT INTO cliente_factura (id_cliente, rfc, razon_social) VALUES ($1,$2,$3)',
+        [id, rfc, razon_social || null]
+      );
+    } else {
+      await client.query('INSERT INTO cliente_sin_factura (id_cliente) VALUES ($1)', [id]);
+    }
+    await client.query('COMMIT');
     res.json(r.rows[0]);
-  } catch (e) { res.status(400).json({ error: e.message }); }
+  } catch (e) {
+    await client.query('ROLLBACK');
+    res.status(400).json({ error: e.message });
+  } finally {
+    client.release();
+  }
 });
 app.delete('/api/cliente/:id', async (req, res) => {
   await pool.query('DELETE FROM cliente WHERE id_cliente=$1', [req.params.id]);
@@ -138,14 +158,36 @@ app.get('/api/trabajador', async (req, res) => {
   res.json(r.rows);
 });
 app.post('/api/trabajador', async (req, res) => {
-  const { nombre, curp, sueldo, id_distribuidora } = req.body;
+  const { nombre, curp, sueldo, id_distribuidora, tipo_trabajador, turno, area_asignada, zona_reparto, tipo_vehiculo } = req.body;
+  const client = await pool.connect();
   try {
-    const r = await pool.query(
+    await client.query('BEGIN');
+    // 1. Insertar en tabla principal
+    const r = await client.query(
       'INSERT INTO trabajador (nombre, curp, sueldo, id_distribuidora) VALUES ($1,$2,$3,$4) RETURNING *',
       [nombre, curp, sueldo, id_distribuidora]
     );
+    const id = r.rows[0].id_trabajador;
+    // 2. Insertar automáticamente en el subtipo correspondiente
+    if (tipo_trabajador === 'interno') {
+      await client.query(
+        'INSERT INTO trabajador_interno (id_trabajador, turno, area_asignada) VALUES ($1,$2,$3)',
+        [id, turno || 'Matutino', area_asignada || null]
+      );
+    } else if (tipo_trabajador === 'repartidor') {
+      await client.query(
+        'INSERT INTO repartidor (id_trabajador, zona_reparto, tipo_vehiculo) VALUES ($1,$2,$3)',
+        [id, zona_reparto || null, tipo_vehiculo || null]
+      );
+    }
+    await client.query('COMMIT');
     res.json(r.rows[0]);
-  } catch (e) { res.status(400).json({ error: e.message }); }
+  } catch (e) {
+    await client.query('ROLLBACK');
+    res.status(400).json({ error: e.message });
+  } finally {
+    client.release();
+  }
 });
 app.delete('/api/trabajador/:id', async (req, res) => {
   await pool.query('DELETE FROM trabajador WHERE id_trabajador=$1', [req.params.id]);
