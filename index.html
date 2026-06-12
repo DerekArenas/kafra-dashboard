@@ -1435,7 +1435,7 @@ async function addCliente() {
     cargarClienteSinFactura();
   } catch(e) { setErr('cliente', e.message); }
 }
-async function delCliente(id) { if (soloConsulta()) return; await apiDelete('/cliente/' + id); cargarCliente(); cargarClienteFactura(); cargarClienteSinFactura(); }
+async function delCliente(id) { if (soloConsulta()) return; await apiDelete('/cliente/' + id); cargarCliente(); }
 
 // ── DISTRIBUIDORA
 async function cargarDistribuidora() {
@@ -1594,7 +1594,7 @@ async function addTrabajador() {
     cargarRepartidor();
   } catch(e) { setErr('trabajador', e.message); }
 }
-async function delTrabajador(id) { if (soloConsulta()) return; await apiDelete('/trabajador/' + id); cargarTrabajador(); cargarTrabajadorInterno(); cargarRepartidor(); }
+async function delTrabajador(id) { if (soloConsulta()) return; await apiDelete('/trabajador/' + id); cargarTrabajador(); }
 
 // ── TRABAJADOR INTERNO
 async function cargarTrabajadorInterno() {
