@@ -1381,13 +1381,58 @@ async function cargarCliente() {
     </tr>`;
   });
 }
+function toggleClienteFactura() {
+  const tipo = v('c_tipo');
+  const campos = document.getElementById('campos_factura');
+  if (tipo === 'Con factura') {
+    campos.style.display = 'block';
+  } else {
+    campos.style.display = 'none';
+    document.getElementById('c_rfc').value = '';
+    document.getElementById('c_razon_social').value = '';
+  }
+}
+
 async function addCliente() {
   if (soloConsulta()) return;
   setErr('cliente', '');
+  const tipo = v('c_tipo');
+  const rfc = v('c_rfc');
+
+  // Validar RFC si es con factura
+  if (tipo === 'Con factura' && !rfc) {
+    setErr('cliente', 'RFC requerido para clientes con factura');
+    return;
+  }
+  if (tipo === 'Con factura' && (rfc.length < 12 || rfc.length > 13)) {
+    setErr('cliente', 'El RFC debe tener 12 o 13 caracteres');
+    return;
+  }
+
   try {
-    await apiPost('/cliente', { nombre: v('c_nombre'), dir_calle_ciudad: v('c_dir'), dir_cp: v('c_cp'), correo: v('c_correo'), tipo_cliente: v('c_tipo'), tipo_atencion: v('c_atencion') });
-    ['c_nombre','c_dir','c_cp','c_correo'].forEach(id => document.getElementById(id).value='');
+    // El servidor inserta automáticamente en cliente_factura o cliente_sin_factura
+    await apiPost('/cliente', {
+      nombre: v('c_nombre'),
+      dir_calle_ciudad: v('c_dir'),
+      dir_cp: v('c_cp'),
+      correo: v('c_correo'),
+      tipo_cliente: tipo,
+      tipo_atencion: v('c_atencion'),
+      rfc: rfc || undefined,
+      razon_social: v('c_razon_social') || undefined
+    });
+
+    // Limpiar campos
+    ['c_nombre','c_dir','c_cp','c_correo','c_rfc','c_razon_social'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+    document.getElementById('campos_factura').style.display = 'none';
+    document.getElementById('c_tipo').value = 'Sin factura';
+
     cargarCliente();
+    cargarClienteFactura();
+    cargarClienteSinFactura();
   } catch(e) { setErr('cliente', e.message); }
 }
 async function delCliente(id) { if (soloConsulta()) return; await apiDelete('/cliente/' + id); cargarCliente(); }
