@@ -220,11 +220,11 @@ app.get('/api/repartidor', async (req, res) => {
   res.json(r.rows);
 });
 app.post('/api/repartidor', async (req, res) => {
-  const { id_trabajador } = req.body;
+  const { id_trabajador, zona_reparto, tipo_vehiculo } = req.body;
   try {
     const r = await pool.query(
-      'INSERT INTO repartidor (id_trabajador) VALUES ($1) RETURNING *',
-      [id_trabajador]
+      'INSERT INTO repartidor (id_trabajador, zona_reparto, tipo_vehiculo) VALUES ($1,$2,$3) RETURNING *',
+      [id_trabajador, zona_reparto || null, tipo_vehiculo || null]
     );
     res.json(r.rows[0]);
   } catch (e) { res.status(400).json({ error: e.message }); }
