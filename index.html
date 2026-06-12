@@ -1167,7 +1167,7 @@
       </div>
       <div class="table-wrapper">
         <table>
-          <thead><tr><th>ID Trabajador</th><th></th></tr></thead>
+          <thead><tr><th>ID Trabajador</th><th>Zona de Reparto</th><th>Tipo de Vehículo</th><th></th></tr></thead>
           <tbody id="t_repartidor"></tbody>
         </table>
       </div>
@@ -1622,7 +1622,7 @@ async function cargarRepartidor() {
   const tb = document.getElementById('t_repartidor');
   tb.innerHTML = '';
   rows.forEach(r => {
-    tb.innerHTML += `<tr><td>${r.id_trabajador}</td>${delBtn(`delRepartidor(${r.id_trabajador})`)}</tr>`;
+    tb.innerHTML += `<tr><td>${r.id_trabajador}</td><td>${r.zona_reparto||'—'}</td><td>${r.tipo_vehiculo||'—'}</td>${delBtn(`delRepartidor(${r.id_trabajador})`)}</tr>`;
   });
 }
 async function addRepartidor() {
