@@ -978,7 +978,7 @@
           <input id="c_dir" placeholder="Calle y Ciudad">
           <input id="c_cp" placeholder="Código Postal" maxlength="5">
           <input id="c_correo" placeholder="Correo electrónico">
-          <select id="c_tipo">
+          <select id="c_tipo" onchange="toggleClienteFactura()">
             <option value="Sin factura">Sin factura</option>
             <option value="Con factura">Con factura</option>
           </select>
@@ -987,6 +987,12 @@
             <option value="Domicilio">Domicilio</option>
             <option value="Mayoreo">Mayoreo</option>
           </select>
+        </div>
+        <div id="campos_factura" style="display:none">
+          <div class="form-grid" style="margin-top:10px">
+            <input id="c_rfc" placeholder="RFC (12-13 caracteres)" maxlength="13">
+            <input id="c_razon_social" placeholder="Razón Social (opcional)">
+          </div>
         </div>
         <button class="btn-primary btn-accion" onclick="addCliente()">＋ Agregar</button>
         <div id="err_cliente" class="error"></div>
@@ -1091,6 +1097,27 @@
           <input id="tr_curp" placeholder="CURP" maxlength="18">
           <input id="tr_sueldo" type="number" placeholder="Sueldo">
           <input id="tr_distrib" type="number" placeholder="ID Distribuidora">
+          <select id="tr_tipo" onchange="toggleTrabajadorTipo()">
+            <option value="">— Tipo de trabajador —</option>
+            <option value="interno">Trabajador Interno</option>
+            <option value="repartidor">Repartidor</option>
+          </select>
+        </div>
+        <div id="campos_interno" style="display:none">
+          <div class="form-grid" style="margin-top:10px">
+            <select id="tr_turno">
+              <option value="Matutino">Matutino</option>
+              <option value="Vespertino">Vespertino</option>
+              <option value="Nocturno">Nocturno</option>
+            </select>
+            <input id="tr_area" placeholder="Área asignada (opcional)">
+          </div>
+        </div>
+        <div id="campos_repartidor" style="display:none">
+          <div class="form-grid" style="margin-top:10px">
+            <input id="tr_zona" placeholder="Zona de reparto">
+            <input id="tr_vehiculo" placeholder="Tipo de vehículo">
+          </div>
         </div>
         <button class="btn-primary btn-accion" onclick="addTrabajador()">＋ Agregar</button>
         <div id="err_trabajador" class="error"></div>
