@@ -1542,13 +1542,56 @@ async function cargarTrabajador() {
     tb.innerHTML += `<tr><td>${r.id_trabajador}</td><td>${r.nombre}</td><td>${r.curp||''}</td><td>${r.sueldo}</td><td>${r.id_distribuidora}</td>${delBtn(`delTrabajador(${r.id_trabajador})`)}</tr>`;
   });
 }
+function toggleTrabajadorTipo() {
+  const tipo = v('tr_tipo');
+  document.getElementById('campos_interno').style.display    = tipo === 'interno'     ? 'block' : 'none';
+  document.getElementById('campos_repartidor').style.display = tipo === 'repartidor'  ? 'block' : 'none';
+}
+
 async function addTrabajador() {
   if (soloConsulta()) return;
   setErr('trabajador', '');
+  const tipo = v('tr_tipo');
+
+  if (!tipo) {
+    setErr('trabajador', 'Selecciona el tipo de trabajador');
+    return;
+  }
+  if (tipo === 'interno' && !v('tr_turno')) {
+    setErr('trabajador', 'El turno es requerido para trabajador interno');
+    return;
+  }
+  if (tipo === 'repartidor' && !v('tr_zona')) {
+    setErr('trabajador', 'La zona de reparto es requerida');
+    return;
+  }
+
   try {
-    await apiPost('/trabajador', { nombre: v('tr_nombre'), curp: v('tr_curp'), sueldo: v('tr_sueldo'), id_distribuidora: v('tr_distrib') });
-    ['tr_nombre','tr_curp','tr_sueldo','tr_distrib'].forEach(id => document.getElementById(id).value='');
+    // El servidor inserta automáticamente en trabajador_interno o repartidor
+    await apiPost('/trabajador', {
+      nombre: v('tr_nombre'),
+      curp: v('tr_curp'),
+      sueldo: v('tr_sueldo'),
+      id_distribuidora: v('tr_distrib'),
+      tipo_trabajador: tipo,
+      turno: v('tr_turno') || undefined,
+      area_asignada: v('tr_area') || undefined,
+      zona_reparto: v('tr_zona') || undefined,
+      tipo_vehiculo: v('tr_vehiculo') || undefined
+    });
+
+    // Limpiar campos
+    ['tr_nombre','tr_curp','tr_sueldo','tr_distrib','tr_zona','tr_vehiculo','tr_area'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+    document.getElementById('tr_tipo').value = '';
+    document.getElementById('campos_interno').style.display = 'none';
+    document.getElementById('campos_repartidor').style.display = 'none';
+
     cargarTrabajador();
+    cargarTrabajadorInterno();
+    cargarRepartidor();
   } catch(e) { setErr('trabajador', e.message); }
 }
 async function delTrabajador(id) { if (soloConsulta()) return; await apiDelete('/trabajador/' + id); cargarTrabajador(); }
