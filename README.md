@@ -52,7 +52,7 @@ Render PostgreSQL 18 — kafra-db
 
 ### Modelo Entidad-Relación
 
-![Diagrama ER](https://github.com/user-attachments/assets/d7e5b292-08ee-4285-897d-8f4c10bbf73f)
+
 
 #### Caso de estudio
 
@@ -84,10 +84,12 @@ Se identificaron las siguientes entidades:
 | Distribuidora — Contrata — Trabajadores | 1:N | Una distribuidora contrata a todos sus trabajadores |
 
 ---
+![Diagrama ER](https://github.com/user-attachments/assets/d7e5b292-08ee-4285-897d-8f4c10bbf73f)
+
 
 ### Modelo Entidad-Relación Extendido
 
-![Diagrama EER](https://github.com/user-attachments/assets/8aef85b7-bab7-463c-9a14-65f3fec15eeb)
+
 
 #### Limitaciones del modelo básico
 
@@ -132,10 +134,10 @@ Se identificó entre Distribuidora, Proveedor y Producto. El mismo producto pued
 | Proveedor — Suministra — Producto | (1,N):(1,N) | Un proveedor suministra al menos un producto; un producto viene de al menos un proveedor |
 
 ---
-
+![Diagrama EER](https://github.com/user-attachments/assets/8aef85b7-bab7-463c-9a14-65f3fec15eeb)
 ### Transformación al Modelo Relacional
 
-![Diagrama Relacional](https://github.com/user-attachments/assets/747f64ec-1c1b-41d5-acab-9ec62236db60)
+
 
 Se eligió la estrategia de **tabla por subtipo** para ambas jerarquías. La tabla del supertipo almacena los atributos comunes y cada subtipo tiene su propia tabla con sus atributos específicos más una FK hacia el supertipo. Esta decisión evita los valores nulos que existían en la práctica 1, donde el RFC quedaba vacío para clientes sin factura.
 
@@ -197,7 +199,7 @@ Fecha_Suministro, Cantidad_Recibida, Precio_Adquisicion
 | Atributos multivaluados | Teléfono en Cliente y Trabajador | Tablas independientes con PK compuesta |
 
 ---
-
+![Diagrama Relacional](https://github.com/user-attachments/assets/747f64ec-1c1b-41d5-acab-9ec62236db60)
 ### DDL, Restricciones de Dominio y DCL
 
 #### Configuración del SGBD
